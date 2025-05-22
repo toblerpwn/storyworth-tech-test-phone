@@ -15,7 +15,9 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+
     await createTwilioCall(phoneNumber);
+
     return NextResponse.json({ success: true });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

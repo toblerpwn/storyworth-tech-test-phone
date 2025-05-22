@@ -14,7 +14,6 @@ enum CallState {
   IDLE = "IDLE",
   CALLING = "CALLING",
 }
-const CALLING_TIMEOUT = 10000; // 10 seconds
 
 export const VoiceCallControls = () => {
   const [digits, setDigits] = useState<string | null>(null);
