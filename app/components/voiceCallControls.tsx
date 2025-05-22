@@ -3,6 +3,8 @@
 import { CallMeButton } from "@/app/components/callMeButton";
 import { PhoneInput } from "@/app/components/phoneInput";
 import Spinner from "@/app/components/ui/spinner";
+import { makeCall } from "@/app/utils/calls";
+import { createTwilioCall } from "@/services/twilio";
 import { useEffect, useRef, useState } from "react";
 
 const INVALID_PHONE_STRING =
@@ -34,6 +36,30 @@ export const VoiceCallControls = () => {
     }
   }, [validDigits, hasSubmittedPhoneNumber]);
 
+  const onCallMeButtonClick = async () => {
+    setHasSubmittedPhoneNumber(true);
+
+    // validate digits
+    if (validDigits) {
+      console.log("Calling number:", digits);
+      setCallState(CallState.CALLING);
+      setErrorString(null);
+
+      try {
+        const call = await makeCall(digits);
+        console.log("Called!", call);
+        setErrorString(null);
+      } catch (error) {
+        console.error("Error calling number:", error);
+        setErrorString(`Call failed. ${error}`);
+      } finally {
+        setCallState(CallState.IDLE);
+      }
+    } else {
+      console.warn("Number is invalid:", errorString);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-2">
@@ -49,22 +75,7 @@ export const VoiceCallControls = () => {
         <CallMeButton
           className="flex-shrink-0"
           disabled={digits === null || callState !== CallState.IDLE}
-          onClick={() => {
-            setHasSubmittedPhoneNumber(true);
-
-            // validate digits
-            if (validDigits) {
-              console.log("Calling number:", digits);
-              setCallState(CallState.CALLING);
-              setErrorString(null);
-              setTimeout(() => {
-                setCallState(CallState.IDLE);
-                console.log("Call ended");
-              }, 5000);
-            } else {
-              console.warn("Number is invalid:", errorString);
-            }
-          }}
+          onClick={onCallMeButtonClick}
         />
         {callState === CallState.CALLING ? (
           <div className="flex flex-row gap-2 items-center">
