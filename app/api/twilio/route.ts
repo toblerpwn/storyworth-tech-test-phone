@@ -1,13 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const PUBLIC_URL =
-  process.env.NEXT_PUBLIC_BASE_URL ||
-  process.env.NGROK_PUBLIC_URL ||
-  "http://localhost:3000";
-
-export const TWILIO_CALL_STATUS_CALLBACK_URL = `${PUBLIC_URL}/api/twilio`;
-
-export enum TwilioCallStatus {
+enum TwilioCallStatus {
   QUEUED = "queued",
   INITIATED = "initiated",
   RINGING = "ringing",
@@ -19,7 +12,7 @@ export enum TwilioCallStatus {
   CANCELED = "canceled",
 }
 
-export const TWILIO_CALL_STATUS_FRIENDLY_TEXT: {
+const TWILIO_CALL_STATUS_FRIENDLY_TEXT: {
   [key in TwilioCallStatus]: string;
 } = {
   [TwilioCallStatus.QUEUED]: "queued",

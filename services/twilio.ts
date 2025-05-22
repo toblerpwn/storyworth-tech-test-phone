@@ -1,5 +1,3 @@
-import { TWILIO_CALL_STATUS_CALLBACK_URL } from "@/app/api/twilio/route";
-
 const apiSid = process.env.TWILIO_API_KEY_SID;
 const apiSecret = process.env.TWILIO_API_KEY_SECRET;
 
@@ -28,6 +26,13 @@ const TWILIO_CALLBACK_EVENTS = [
   TwilioCallbackEvents.ANSWERED,
   TwilioCallbackEvents.COMPLETED,
 ];
+
+const PUBLIC_URL =
+  process.env.NEXT_PUBLIC_BASE_URL ||
+  process.env.NGROK_PUBLIC_URL ||
+  "http://localhost:3000";
+
+const TWILIO_CALL_STATUS_CALLBACK_URL = `${PUBLIC_URL}/api/twilio`;
 
 export const createTwilioCall = async (phoneNumber: string) => {
   // using Twilio REST API to simplify the technical stack for this project
