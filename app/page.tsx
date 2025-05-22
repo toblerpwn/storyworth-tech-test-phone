@@ -1,4 +1,5 @@
-import Divider from "@/app/components/divider";
+import Divider from "@/app/components/ui/divider";
+import { VoiceCallControls } from "@/app/components/voiceCallControls";
 import Image from "next/image";
 
 const howItWorksSteps = [
@@ -12,7 +13,7 @@ export default function Home() {
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20]">
       <main className="flex flex-col gap-[36px] row-start-2 items-center justify-items-center max-w-2xl">
         <Image
-          className="dark:invert"
+          className="w-auto h-auto"
           src="/assets/laptop-typing.png"
           alt="Laptop with a typing hand"
           width={180}
@@ -22,8 +23,12 @@ export default function Home() {
         <h1 className="font-display text-4xl text">
           Record your voice over the phone and we'll transcribe your story.
         </h1>
+        <div className="w-full">
+          <VoiceCallControls />
+        </div>
+        <Divider />
         <div className="flex flex-col gap-[16px] items-center justify-items-center sm:items-start">
-          <h2 className="font-label uppercase font-bold tracking-widest">
+          <h2 className="font-label uppercase font-bold tracking-[0.125em]">
             How it works
           </h2>
           {howItWorksSteps.map((step, index) => (
@@ -32,9 +37,7 @@ export default function Home() {
                 <p className="font-display text-[28px]">{`0${index + 1}`}</p>
                 <p className="font-text text-xl">{step}</p>
               </div>
-              {index < howItWorksSteps.length - 1 ? (
-                <Divider className="w-full mx-8 my-2" />
-              ) : null}
+              {index < howItWorksSteps.length - 1 ? <Divider /> : null}
             </div>
           ))}
         </div>
