@@ -26,7 +26,8 @@ export const createTwilioCall = async (phoneNumber: string) => {
   const params = new URLSearchParams({
     From: TWILIO_PHONE_NUMBER,
     To: phoneNumber,
-    Url: "https://localhost:3000/twiml.xml",
+    Twiml:
+      '<Response><Say voice="woman">Hello! This is Storyworth, where every story is worth sharing. Please begin recording your one minute story now...</Say><Record maxLength="60" playBeep="true" /></Response>',
     Record: "true",
   });
 
