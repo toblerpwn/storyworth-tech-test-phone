@@ -19,13 +19,13 @@ export default function Home() {
           height={38}
           priority
         />
-        <h3 className="font-display text-4xl text">
+        <h1 className="font-display text-4xl text">
           Record your voice over the phone and we'll transcribe your story.
-        </h3>
+        </h1>
         <div className="flex flex-col gap-[16px] items-center justify-items-center sm:items-start">
-          <p className="font-label uppercase font-bold tracking-widest">
+          <h2 className="font-label uppercase font-bold tracking-widest">
             How it works
-          </p>
+          </h2>
           {howItWorksSteps.map((step, index) => (
             <div key={index}>
               <div className="flex flex-row gap-[28px] items-center justify-items-center">
