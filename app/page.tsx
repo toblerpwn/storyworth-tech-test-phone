@@ -20,6 +20,8 @@ export default function Home() {
   const userId = useCurrentUserId();
   const activeCallSid = useCurrentUserCallSid();
   const callRecordingUrl = useCallRecordingUrl(activeCallSid);
+
+  // TODO: handle cases where transcript will be known null, e.g. recordings under two seconds, etc
   const callTranscriptText = useCallTranscriptText(activeCallSid);
 
   return (
