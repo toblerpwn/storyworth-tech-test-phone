@@ -124,7 +124,7 @@ export const VoiceCallControls = () => {
           }}
         />
       </div>
-      <div className="flex flex-row gap-4">
+      <div className="flex flex-col sm:flex-row gap-4">
         <BrandedButton
           label="Call Me Now"
           className="flex-shrink-0"
