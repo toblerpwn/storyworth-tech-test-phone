@@ -4,14 +4,19 @@ import { CallRecordingControls } from "@/app/components/callRecordingControls";
 import HomeFooter from "@/app/components/homeFooter";
 import { HowItWorks } from "@/app/components/howItWorks";
 import Divider from "@/app/components/ui/divider";
+import Spinner from "@/app/components/ui/spinner";
 import { VoiceCallControls } from "@/app/components/voiceCallControls";
 import { useCallRecordingUrl } from "@/app/hooks/useCall";
-import { useCurrentUserCallSid } from "@/app/hooks/useCurrentUser";
+import {
+  useCurrentUserCallSid,
+  useCurrentUserId,
+} from "@/app/hooks/useCurrentUser";
 import Image from "next/image";
 
 export default function Home() {
-  const callSid = useCurrentUserCallSid();
-  const callRecordingUrl = useCallRecordingUrl(callSid);
+  const userId = useCurrentUserId();
+  const activeCallSid = useCurrentUserCallSid();
+  const callRecordingUrl = useCallRecordingUrl(activeCallSid);
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20]">
@@ -27,11 +32,13 @@ export default function Home() {
         <h1 className="font-display text-4xl text">
           Record your voice over the phone and we&apos;ll transcribe your story.
         </h1>
-        <div className="w-full">
-          {!callRecordingUrl ? (
+        <div className="w-full min-h-40">
+          {callRecordingUrl ? (
+            <CallRecordingControls url={callRecordingUrl} />
+          ) : userId ? (
             <VoiceCallControls />
           ) : (
-            <CallRecordingControls url={callRecordingUrl} />
+            <Spinner />
           )}
         </div>
         <Divider />

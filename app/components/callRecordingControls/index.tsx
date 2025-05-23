@@ -15,25 +15,27 @@ export const CallRecordingControls = ({ url }: CallRecordingControlsProps) => {
   // this is to allow the URL to replicate/etc and playback to be available
   // playing immediately reliably fails due to Twilio caching/etc
   useEffect(() => {
-    console.log("Delaying playback for 5 seconds...");
     setTimeout(() => {
-      console.log("Allowing playback!");
       setDelayingPlayback(false);
-    }, 2000);
+    }, 1500);
   }, [url]);
 
   return (
-    <div className="flex flex-row items-center justify-center gap-2">
-      {delayingPlayback ? <Spinner /> : null}
-      <audio
-        key={`${url}-${delayingPlayback}`}
-        ref={audioRef}
-        src={delayingPlayback ? undefined : url}
-        controls
-        preload="auto"
-        autoPlay={!delayingPlayback}
-      />
-      {delayingPlayback ? <div className="w-5" /> : null}
+    <div className="gap-5 flex flex-col ">
+      <div className="flex flex-row gap-1 text-[#12473A]">
+        <p>Story recording:</p>
+        {delayingPlayback ? <Spinner /> : <p>ready!</p>}
+      </div>
+      <div className="flex flex-row items-center gap-2">
+        <audio
+          key={`${url}-${delayingPlayback}`}
+          ref={audioRef}
+          src={delayingPlayback ? undefined : url}
+          controls
+          preload="auto"
+          autoPlay={!delayingPlayback}
+        />
+      </div>
     </div>
   );
 };
