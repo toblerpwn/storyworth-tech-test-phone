@@ -61,7 +61,7 @@ export const createTwilioCall = async (phoneNumber: string) => {
     body: params.toString(),
   });
 
-  console.log("response", response.status);
+  console.log("response.status", response.status);
 
   if (!response.ok) {
     const error = await response.text();
@@ -70,6 +70,6 @@ export const createTwilioCall = async (phoneNumber: string) => {
   }
 
   const call = await response.json();
-  console.log("call.sid", call.sid);
-  console.log("call", call);
+
+  return call;
 };

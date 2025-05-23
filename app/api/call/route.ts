@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createTwilioCall } from "@/services/twilio";
+import { TwilioCallResponse } from "@/types/twilio";
 
 export type CallRequestBody = {
   phoneNumber: string;
+};
+
+export type CallRequestResponseData = {
+  success: true;
+  call: TwilioCallResponse;
 };
 
 export async function POST(req: NextRequest) {
@@ -16,9 +22,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    await createTwilioCall(phoneNumber);
+    const call = await createTwilioCall(phoneNumber);
 
-    return NextResponse.json({ success: true });
+    const response: CallRequestResponseData = {
+      success: true,
+      call,
+    };
+    return NextResponse.json(response);
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

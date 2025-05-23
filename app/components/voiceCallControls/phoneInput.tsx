@@ -44,14 +44,15 @@ export const PhoneInput = ({
     if (!digits || digits.length === 0) {
       setValue("");
     } else {
-      // send only digits number to parent
-      if (onDigitsChange) {
-        onDigitsChange(digits);
-      }
       // send formatted value to local state for display
       const formattedValue = formatPhone(input);
       // console.log("Formatted value:", formattedValue);
       setValue(formattedValue || "");
+    }
+
+    // send only digits number to parent
+    if (onDigitsChange) {
+      onDigitsChange(digits);
     }
   };
 

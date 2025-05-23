@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 `use client`;
 
 import type { Metadata } from "next";

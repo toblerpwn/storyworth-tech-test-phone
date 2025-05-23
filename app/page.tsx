@@ -1,14 +1,18 @@
+"use client";
+
+import { CallRecordingControls } from "@/app/components/callRecordingControls";
+import HomeFooter from "@/app/components/homeFooter";
+import { HowItWorks } from "@/app/components/howItWorks";
 import Divider from "@/app/components/ui/divider";
 import { VoiceCallControls } from "@/app/components/voiceCallControls";
+import { useCallRecordingUrl } from "@/app/hooks/useCall";
+import { useCurrentUserCallSid } from "@/app/hooks/useCurrentUser";
 import Image from "next/image";
 
-const howItWorksSteps = [
-  "Enter your phone number and Storyworth will call you to record your story.",
-  "During the call we’ll record your story over the phone.",
-  "After the call, an audio clip of your recording will be uploaded to your story where you can then request it to be transcribed.",
-];
-
 export default function Home() {
+  const callSid = useCurrentUserCallSid();
+  const callRecordingUrl = useCallRecordingUrl(callSid);
+
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20]">
       <main className="flex flex-col gap-[36px] row-start-2 items-center justify-items-center max-w-2xl">
@@ -21,30 +25,15 @@ export default function Home() {
           priority
         />
         <h1 className="font-display text-4xl text">
-          Record your voice over the phone and we'll transcribe your story.
+          Record your voice over the phone and we&apos;ll transcribe your story.
         </h1>
         <div className="w-full">
           <VoiceCallControls />
         </div>
         <Divider />
-        <div className="flex flex-col gap-[16px] items-center justify-items-center sm:items-start">
-          <h2 className="font-label uppercase font-bold tracking-[0.125em]">
-            How it works
-          </h2>
-          {howItWorksSteps.map((step, index) => (
-            <div key={index}>
-              <div className="flex flex-row gap-[28px] items-center justify-items-center">
-                <p className="font-display text-[28px]">{`0${index + 1}`}</p>
-                <p className="font-text text-xl">{step}</p>
-              </div>
-              {index < howItWorksSteps.length - 1 ? <Divider /> : null}
-            </div>
-          ))}
-        </div>
+        {!callRecordingUrl ? <HowItWorks /> : <CallRecordingControls />}
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        /* todo: debug info */
-      </footer>
+      <HomeFooter />
     </div>
   );
 }

@@ -9,6 +9,7 @@
   "editor.formatOnPaste": false,
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
+  "eslint.useFlatConfig": true,
   "files.associations": {
     "*.css": "tailwindcss"
   },

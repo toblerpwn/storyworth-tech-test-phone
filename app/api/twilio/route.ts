@@ -1,30 +1,6 @@
+import { setCall } from "@/services/firebase";
+import { TwilioCallStatus } from "@/types/twilio";
 import { NextRequest, NextResponse } from "next/server";
-
-enum TwilioCallStatus {
-  QUEUED = "queued",
-  INITIATED = "initiated",
-  RINGING = "ringing",
-  IN_PROGRESS = "in-progress",
-  COMPLETED = "completed",
-  BUSY = "busy",
-  FAILED = "failed",
-  NO_ANSWER = "no-answer",
-  CANCELED = "canceled",
-}
-
-const TWILIO_CALL_STATUS_FRIENDLY_TEXT: {
-  [key in TwilioCallStatus]: string;
-} = {
-  [TwilioCallStatus.QUEUED]: "queued",
-  [TwilioCallStatus.INITIATED]: "initiated",
-  [TwilioCallStatus.RINGING]: "ringing",
-  [TwilioCallStatus.IN_PROGRESS]: "in progress",
-  [TwilioCallStatus.COMPLETED]: "completed",
-  [TwilioCallStatus.BUSY]: "busy",
-  [TwilioCallStatus.FAILED]: "failed",
-  [TwilioCallStatus.NO_ANSWER]: "no answer",
-  [TwilioCallStatus.CANCELED]: "canceled",
-};
 
 export async function POST(req: NextRequest) {
   console.log("POST /api/twilio start");
@@ -34,18 +10,20 @@ export async function POST(req: NextRequest) {
     const body = await req.formData();
 
     // get state of the call
+    const callSid = body.get("CallSid") as string;
+    if (!callSid) {
+      return NextResponse.json({ error: "Missing CallSid" }, { status: 400 });
+    }
+
     const callStatus = body.get("CallStatus") as TwilioCallStatus;
-    const recordingUrl = body.get("RecordingUrl");
+    const recordingUrl = body.get("RecordingUrl") as string;
 
-    console.log(
-      "Call status:",
-      callStatus,
-      "friendly text:",
-      TWILIO_CALL_STATUS_FRIENDLY_TEXT[callStatus]
-    );
-    console.log("Recording URL:", recordingUrl);
+    console.log(`Call ${callSid} status: ${callStatus} (${recordingUrl})`);
 
-    // TODO: EMIT SOCKET EVENT TO CLIENT LISTENING FOR UPDATES ON CALL SID
+    await setCall(callSid, {
+      status: callStatus,
+      recordingUrl: recordingUrl,
+    });
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
