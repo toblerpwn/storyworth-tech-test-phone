@@ -34,3 +34,9 @@ export const useCallRecordingUrl = (callSid: string | null) => {
   const call = useCall(callSid);
   return call?.recordingUrl;
 };
+
+export const useCallTranscriptText = (callSid: string | null) => {
+  const call = useCall(callSid);
+  console.log("call", call);
+  return call?.transcriptText;
+};

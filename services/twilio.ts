@@ -34,20 +34,28 @@ const VERCEL_URL = "https://storyworth-tech-test-phone.vercel.app";
 const PUBLIC_URL =
   process.env.NGROK_PUBLIC_URL || VERCEL_URL || "http://localhost:3000";
 
-const TWILIO_CALL_STATUS_CALLBACK_URL = `${PUBLIC_URL}/api/twilio`;
+const TWILIO_CALL_API_ROOT = `${PUBLIC_URL}/api/call`;
+const TWILIO_CALL_STATUS_CALLBACK_URL = `${TWILIO_CALL_API_ROOT}/status`;
+const TWILIO_CALL_RECORDING_CALLBACK_URL = `${TWILIO_CALL_API_ROOT}/recording`;
+const TWILIO_CALL_TRANSCRIPT_CALLBACK_URL = `${TWILIO_CALL_API_ROOT}/transcript`;
 
 console.log("TWILIO_CALL_STATUS_CALLBACK_URL", TWILIO_CALL_STATUS_CALLBACK_URL);
 
 export const createTwilioCall = async (phoneNumber: string) => {
-  // using Twilio REST API to simplify the technical stack for this project
-  // TODO: move Twilio API calls to a some backend
+  // TODO: do local transcription instead of Twilio - right now, limit is only 2 minutes
   const url = `${TWILIO_REST_API_ROOT}/${TWILIO_REST_API_ACCOUNT_STRING}/Calls.json`;
   const params = new URLSearchParams({
     From: TWILIO_PHONE_NUMBER,
     To: phoneNumber,
-    Twiml:
-      '<Response><Pause length="1"/><Say voice="woman">Hello! This is Storyworth, where every story is worth sharing. Please begin recording your one minute story now...</Say><Record maxLength="600" playBeep="true" /></Response>',
-    Record: "true",
+    Twiml: `
+      <Response>
+        <Pause length="2"/>
+        <Say voice="woman">
+          Hello! This is Storyworth, where every story is worth sharing. Let's start with a brief story about your fondest childhood memory. You may begin recording after the beep...
+        </Say>
+        <Record maxLength="120" playBeep="true" transcribe="true" transcribeCallback="${TWILIO_CALL_TRANSCRIPT_CALLBACK_URL}" recordingStatusCallback="${TWILIO_CALL_RECORDING_CALLBACK_URL} " />
+      </Response>
+    `,
     StatusCallback: TWILIO_CALL_STATUS_CALLBACK_URL,
   });
 

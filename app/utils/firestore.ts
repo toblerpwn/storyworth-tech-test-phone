@@ -31,6 +31,8 @@ export const firestoreCallFromDoc = (doc: DocumentSnapshot): FirestoreCall => {
     updatedAt: data?.updatedAt?.toDate(),
     status: data?.status,
     recordingUrl: data?.recordingUrl,
+    transcriptUrl: data?.transcriptUrl,
+    transcriptText: data?.transcriptText,
   };
 };
 
@@ -57,10 +59,16 @@ export const setActiveCall = async (
   const callData: Partial<FirestoreCall> = {
     status,
   };
-  await setDoc(callDocRef, {
-    ...callData,
-    updatedAt: serverTimestamp(),
-  });
+  await setDoc(
+    callDocRef,
+    {
+      ...callData,
+      updatedAt: serverTimestamp(),
+    },
+    {
+      merge: true,
+    }
+  );
 
   return callSid;
 };

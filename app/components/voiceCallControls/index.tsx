@@ -123,6 +123,7 @@ export const VoiceCallControls = () => {
           <div className="flex flex-row gap-2 items-center">
             {callUiState === CallUiState.CALLING ? <Spinner /> : null}
             <p className="font-text text-[#12473A]">{statusString}</p>
+            {callUiState === CallUiState.COMPLETED ? <Spinner /> : null}
           </div>
         ) : errorString ? (
           <p className="font-text text-red-500">{errorString}</p>

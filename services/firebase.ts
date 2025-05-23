@@ -118,11 +118,18 @@ export const watchCallSid = (
 
 export const setCall = async (
   callSid: string,
-  options: Partial<FirestoreCall>
+  options: Partial<FirestoreCall>,
+  merge: boolean = true
 ) => {
   const callDocRef = doc(firebaseFirestore, FIRESTORE_CALL_COLLECTION, callSid);
-  await setDoc(callDocRef, {
-    ...options,
-    updatedAt: serverTimestamp(),
-  });
+  await setDoc(
+    callDocRef,
+    {
+      ...options,
+      updatedAt: serverTimestamp(),
+    },
+    {
+      merge,
+    }
+  );
 };

@@ -3,7 +3,7 @@ import { TwilioCallStatus } from "@/types/twilio";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  console.log("POST /api/twilio start");
+  console.log("POST /api/call/status start");
 
   try {
     // decode body of the request
@@ -16,13 +16,11 @@ export async function POST(req: NextRequest) {
     }
 
     const callStatus = body.get("CallStatus") as TwilioCallStatus;
-    const recordingUrl = body.get("RecordingUrl") as string;
 
-    console.log(`Call ${callSid} status: ${callStatus} (${recordingUrl})`);
+    console.log(`Call ${callSid} status: ${callStatus}`);
 
     await setCall(callSid, {
       status: callStatus,
-      recordingUrl: recordingUrl,
     });
 
     return NextResponse.json({ success: true });

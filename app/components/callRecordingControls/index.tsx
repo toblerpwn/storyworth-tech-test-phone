@@ -5,24 +5,30 @@ import Spinner from "@/app/components/ui/spinner";
 import { useEffect, useRef, useState } from "react";
 
 type CallRecordingControlsProps = {
-  url: string;
+  recordingUrl: string;
+  transcriptText?: string | null;
 };
 
-export const CallRecordingControls = ({ url }: CallRecordingControlsProps) => {
+export const CallRecordingControls = ({
+  recordingUrl,
+  transcriptText,
+}: CallRecordingControlsProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [delayingPlayback, setDelayingPlayback] = useState(true);
+  const [showTranscript, setShowTranscript] = useState(false);
 
   // delay playback for a few seconds at startup
   // this is to allow the URL to replicate/etc and playback to be available
   // playing immediately reliably fails due to Twilio caching/etc
+  // TODO: download locally and validate before playing (then remove delay)
   useEffect(() => {
     setTimeout(() => {
       setDelayingPlayback(false);
     }, 3500);
-  }, [url]);
+  }, [recordingUrl]);
 
   const handleShowTranscript = () => {
-    console.warn("TODO: show transcript");
+    setShowTranscript((prev) => !prev);
   };
 
   return (
@@ -33,20 +39,36 @@ export const CallRecordingControls = ({ url }: CallRecordingControlsProps) => {
       </div>
       <div className="gap-5 flex flex-col px-5">
         <audio
-          key={`${url}-${delayingPlayback}`}
+          key={`${recordingUrl}-${delayingPlayback}`}
           ref={audioRef}
-          src={delayingPlayback ? undefined : url}
+          src={delayingPlayback ? undefined : recordingUrl}
           controls
           preload="auto"
           autoPlay={!delayingPlayback}
         />
-        <BrandedButton
-          disabled={delayingPlayback}
-          label="Show Transcript"
-          className="w-[260px]"
-          // disabled={digits === null || callUiState >= CallUiState.CALLING}
-          onClick={handleShowTranscript}
-        />
+        <div className="flex flex-row gap-2 items-center">
+          <BrandedButton
+            label={
+              !transcriptText
+                ? "Loading Transcript..."
+                : showTranscript
+                ? "Hide Transcript"
+                : "Show Transcript"
+            }
+            className={`w-[260px] ${showTranscript ? "opacity-60" : ""}`}
+            disabled={!transcriptText}
+            onClick={handleShowTranscript}
+          />
+          {!transcriptText ? <Spinner /> : null}
+        </div>
+
+        {showTranscript ? (
+          <div className="pl-8">
+            <p className="font-text text-[#12473A] border-l-4 border-[#12473A] pl-4 italic">
+              {transcriptText ? transcriptText : "No transcript available."}
+            </p>
+          </div>
+        ) : null}
       </div>
     </div>
   );

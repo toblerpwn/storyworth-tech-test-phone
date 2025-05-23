@@ -13,4 +13,6 @@ export type FirestoreCall = {
   updatedAt: Date;
   status: TwilioCallStatus;
   recordingUrl: string | null;
+  transcriptText: string | null;
+  transcriptUrl: string | null;
 };

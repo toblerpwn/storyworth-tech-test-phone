@@ -6,7 +6,10 @@ import { HowItWorks } from "@/app/components/howItWorks";
 import Divider from "@/app/components/ui/divider";
 import Spinner from "@/app/components/ui/spinner";
 import { VoiceCallControls } from "@/app/components/voiceCallControls";
-import { useCallRecordingUrl } from "@/app/hooks/useCall";
+import {
+  useCallRecordingUrl,
+  useCallTranscriptText,
+} from "@/app/hooks/useCall";
 import {
   useCurrentUserCallSid,
   useCurrentUserId,
@@ -17,6 +20,7 @@ export default function Home() {
   const userId = useCurrentUserId();
   const activeCallSid = useCurrentUserCallSid();
   const callRecordingUrl = useCallRecordingUrl(activeCallSid);
+  const callTranscriptText = useCallTranscriptText(activeCallSid);
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20]">
@@ -34,7 +38,10 @@ export default function Home() {
         </h1>
         <div className="w-full min-h-40">
           {callRecordingUrl ? (
-            <CallRecordingControls url={callRecordingUrl} />
+            <CallRecordingControls
+              recordingUrl={callRecordingUrl}
+              transcriptText={callTranscriptText}
+            />
           ) : userId ? (
             <VoiceCallControls />
           ) : (
