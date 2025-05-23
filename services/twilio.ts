@@ -46,7 +46,7 @@ export const createTwilioCall = async (phoneNumber: string) => {
     From: TWILIO_PHONE_NUMBER,
     To: phoneNumber,
     Twiml:
-      '<Response><Pause length="1"/><Say voice="woman">Hello! This is Storyworth, where every story is worth sharing. Please begin recording your one minute story now...</Say><Record maxLength="60" playBeep="true" /></Response>',
+      '<Response><Pause length="1"/><Say voice="woman">Hello! This is Storyworth, where every story is worth sharing. Please begin recording your one minute story now...</Say><Record maxLength="600" playBeep="true" /></Response>',
     Record: "true",
     StatusCallback: TWILIO_CALL_STATUS_CALLBACK_URL,
   });
