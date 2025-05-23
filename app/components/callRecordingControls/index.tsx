@@ -26,25 +26,28 @@ export const CallRecordingControls = ({ url }: CallRecordingControlsProps) => {
   };
 
   return (
-    <div className="gap-5 flex flex-col ">
+    <div className="gap-3 flex flex-col ">
       <div className="flex flex-row gap-1 text-[#12473A]">
         <p>Story recording:</p>
         {delayingPlayback ? <Spinner /> : <p>ready!</p>}
       </div>
-      <audio
-        key={`${url}-${delayingPlayback}`}
-        ref={audioRef}
-        src={delayingPlayback ? undefined : url}
-        controls
-        preload="auto"
-        autoPlay={!delayingPlayback}
-      />
-      <BrandedButton
-        label="Show Transcript"
-        className="flex-shrink-0"
-        // disabled={digits === null || callUiState >= CallUiState.CALLING}
-        onClick={handleShowTranscript}
-      />
+      <div className="gap-5 flex flex-col px-5">
+        <audio
+          key={`${url}-${delayingPlayback}`}
+          ref={audioRef}
+          src={delayingPlayback ? undefined : url}
+          controls
+          preload="auto"
+          autoPlay={!delayingPlayback}
+        />
+        <BrandedButton
+          disabled={delayingPlayback}
+          label="Show Transcript"
+          className="w-[260px]"
+          // disabled={digits === null || callUiState >= CallUiState.CALLING}
+          onClick={handleShowTranscript}
+        />
+      </div>
     </div>
   );
 };
