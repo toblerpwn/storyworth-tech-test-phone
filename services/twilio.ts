@@ -53,7 +53,7 @@ export const createTwilioCall = async (phoneNumber: string) => {
         <Say voice="woman">
           Hello! This is Storyworth, where every story is worth sharing. Let's start with a brief story about your fondest childhood memory. You may begin recording after the beep...
         </Say>
-        <Record maxLength="120" timeout="0" playBeep="true" transcribe="true" transcribeCallback="${TWILIO_CALL_TRANSCRIPT_CALLBACK_URL}" recordingStatusCallback="${TWILIO_CALL_RECORDING_CALLBACK_URL} " />
+        <Record maxLength="120" timeout="10" playBeep="true" transcribe="true" transcribeCallback="${TWILIO_CALL_TRANSCRIPT_CALLBACK_URL}" recordingStatusCallback="${TWILIO_CALL_RECORDING_CALLBACK_URL} " />
       </Response>
     `,
     StatusCallback: TWILIO_CALL_STATUS_CALLBACK_URL,
