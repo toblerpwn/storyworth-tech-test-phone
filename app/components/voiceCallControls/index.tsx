@@ -27,32 +27,11 @@ export const VoiceCallControls = () => {
   const [digits, setDigits] = useState<string | null>(null);
   const [errorString, setErrorString] = useState<string | null>(null);
   const [hasSubmittedPhoneNumber, setHasSubmittedPhoneNumber] = useState(false);
+  const [callUiState, setCallUiState] = useState(CallUiState.IDLE);
 
   const userId = useCurrentUserId();
   const callSid = useCurrentUserCallSid();
   const callStatus = useCallStatus(callSid);
-
-  let callUiState = CallUiState.IDLE;
-  switch (callStatus) {
-    case TwilioCallStatus.QUEUED:
-    case TwilioCallStatus.INITIATED:
-    case TwilioCallStatus.RINGING:
-    case TwilioCallStatus.IN_PROGRESS:
-      callUiState = CallUiState.CALLING;
-      break;
-    case TwilioCallStatus.COMPLETED:
-      callUiState = CallUiState.COMPLETED;
-      break;
-    case TwilioCallStatus.BUSY:
-    case TwilioCallStatus.FAILED:
-    case TwilioCallStatus.NO_ANSWER:
-    case TwilioCallStatus.CANCELED:
-      callUiState = CallUiState.ERROR;
-      break;
-    default:
-      callUiState = CallUiState.IDLE;
-      break;
-  }
 
   const validDigits = Boolean(digits && digits.length === 10);
 
@@ -69,6 +48,31 @@ export const VoiceCallControls = () => {
     }
   }, [validDigits, hasSubmittedPhoneNumber]);
 
+  useEffect(() => {
+    let callUiState = CallUiState.IDLE;
+    switch (callStatus) {
+      case TwilioCallStatus.QUEUED:
+      case TwilioCallStatus.INITIATED:
+      case TwilioCallStatus.RINGING:
+      case TwilioCallStatus.IN_PROGRESS:
+        callUiState = CallUiState.CALLING;
+        break;
+      case TwilioCallStatus.COMPLETED:
+        callUiState = CallUiState.COMPLETED;
+        break;
+      case TwilioCallStatus.BUSY:
+      case TwilioCallStatus.FAILED:
+      case TwilioCallStatus.NO_ANSWER:
+      case TwilioCallStatus.CANCELED:
+        callUiState = CallUiState.ERROR;
+        break;
+      default:
+        callUiState = CallUiState.IDLE;
+        break;
+    }
+    setCallUiState(callUiState);
+  }, [callStatus]);
+
   const onCallMeButtonClick = async () => {
     if (!userId) {
       setErrorString("Still loading user. Try again in a few seconds...");
@@ -83,12 +87,14 @@ export const VoiceCallControls = () => {
       setErrorString(null);
 
       try {
+        setCallUiState(CallUiState.CALLING);
         const call = await makeCall(digits);
         console.log("Call response:", call);
         await setActiveCall(userId, call.sid, call.status);
       } catch (error) {
         console.error("Error calling number:", error);
         setErrorString(`Call failed. ${error}`);
+        setCallUiState(CallUiState.ERROR);
       }
     } else {
       console.warn("Number is invalid:", errorString);

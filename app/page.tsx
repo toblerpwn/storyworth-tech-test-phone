@@ -28,10 +28,14 @@ export default function Home() {
           Record your voice over the phone and we&apos;ll transcribe your story.
         </h1>
         <div className="w-full">
-          <VoiceCallControls />
+          {!callRecordingUrl ? (
+            <VoiceCallControls />
+          ) : (
+            <CallRecordingControls url={callRecordingUrl} />
+          )}
         </div>
         <Divider />
-        {!callRecordingUrl ? <HowItWorks /> : <CallRecordingControls />}
+        <HowItWorks />
       </main>
       <HomeFooter />
     </div>

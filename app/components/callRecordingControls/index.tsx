@@ -1,37 +1,39 @@
 "use client";
 
-import { useCallRecordingUrl } from "@/app/hooks/useCall";
-import { useCurrentUserCallSid } from "@/app/hooks/useCurrentUser";
-import { useState, useRef } from "react";
+import Spinner from "@/app/components/ui/spinner";
+import { useEffect, useRef, useState } from "react";
 
-export const CallRecordingControls = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
+type CallRecordingControlsProps = {
+  url: string;
+};
 
+export const CallRecordingControls = ({ url }: CallRecordingControlsProps) => {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const [delayingPlayback, setDelayingPlayback] = useState(true);
 
-  const callSid = useCurrentUserCallSid();
-  const callRecordingUrl = useCallRecordingUrl(callSid);
-  console.log("callRecordingUrl", callRecordingUrl);
-
-  const togglePlay = () => {
-    if (!audioRef.current) return;
-
-    if (isPlaying) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.play();
-    }
-    setIsPlaying(!isPlaying);
-  };
+  // delay playback for a few seconds at startup
+  // this is to allow the URL to replicate/etc and playback to be available
+  // playing immediately reliably fails due to Twilio caching/etc
+  useEffect(() => {
+    console.log("Delaying playback for 5 seconds...");
+    setTimeout(() => {
+      console.log("Allowing playback!");
+      setDelayingPlayback(false);
+    }, 2000);
+  }, [url]);
 
   return (
-    <div>
-      {callRecordingUrl ? (
-        <>
-          <audio ref={audioRef} src={callRecordingUrl} />
-          <button onClick={togglePlay}>{isPlaying ? "Pause" : "Play"}</button>
-        </>
-      ) : null}
+    <div className="flex flex-row items-center justify-center gap-2">
+      {delayingPlayback ? <Spinner /> : null}
+      <audio
+        key={`${url}-${delayingPlayback}`}
+        ref={audioRef}
+        src={delayingPlayback ? undefined : url}
+        controls
+        preload="auto"
+        autoPlay={!delayingPlayback}
+      />
+      {delayingPlayback ? <div className="w-5" /> : null}
     </div>
   );
 };
