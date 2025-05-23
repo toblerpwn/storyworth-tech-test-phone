@@ -27,12 +27,12 @@ const TWILIO_CALLBACK_EVENTS = [
   TwilioCallbackEvents.COMPLETED,
 ];
 
-const VERCEL_URL = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : undefined;
+// TODO: this should work at build time on Vercel using process.env.VERCEL_URL, I think...
+// but it's not, so hard-coding for now
+const VERCEL_URL = "https://storyworth-tech-test-phone.vercel.app/";
 
 const PUBLIC_URL =
-  VERCEL_URL || process.env.NGROK_PUBLIC_URL || "http://localhost:3000";
+  process.env.NGROK_PUBLIC_URL || VERCEL_URL || "http://localhost:3000";
 
 const TWILIO_CALL_STATUS_CALLBACK_URL = `${PUBLIC_URL}/api/twilio`;
 
