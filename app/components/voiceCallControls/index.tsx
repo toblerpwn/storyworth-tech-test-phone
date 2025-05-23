@@ -28,6 +28,7 @@ export const VoiceCallControls = () => {
   const [errorString, setErrorString] = useState<string | null>(null);
   const [hasSubmittedPhoneNumber, setHasSubmittedPhoneNumber] = useState(false);
   const [callUiState, setCallUiState] = useState(CallUiState.IDLE);
+  const [statusStrings, setStatusStrings] = useState<string[] | null>(null);
 
   const userId = useCurrentUserId();
   const callSid = useCurrentUserCallSid();
@@ -35,9 +36,20 @@ export const VoiceCallControls = () => {
 
   const validDigits = Boolean(digits && digits.length === 10);
 
-  const statusString = callStatus
-    ? TWILIO_CALL_STATUS_FRIENDLY_TEXT[callStatus]
-    : null;
+  useEffect(() => {
+    if (!callStatus) {
+      setStatusStrings(null);
+      return;
+    }
+
+    // check whether friendly text is a string or array
+    const friendlyText = TWILIO_CALL_STATUS_FRIENDLY_TEXT[callStatus];
+    if (Array.isArray(friendlyText)) {
+      setStatusStrings(friendlyText);
+    } else {
+      setStatusStrings([friendlyText]);
+    }
+  }, [callStatus]);
 
   useEffect(() => {
     console.log("Valid digits:", validDigits);
@@ -122,7 +134,11 @@ export const VoiceCallControls = () => {
         {callUiState >= CallUiState.CALLING ? (
           <div className="flex flex-row gap-2 items-center">
             {callUiState === CallUiState.CALLING ? <Spinner /> : null}
-            <p className="font-text text-[#12473A]">{statusString}</p>
+            <div className="font-text text-[#12473A] flex flex-col gap-2">
+              {statusStrings && statusStrings.length > 0
+                ? statusStrings.map((s, i) => <p key={i}>{s}</p>)
+                : null}
+            </div>
             {callUiState === CallUiState.COMPLETED ? <Spinner /> : null}
           </div>
         ) : errorString ? (
