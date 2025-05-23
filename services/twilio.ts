@@ -27,10 +27,12 @@ const TWILIO_CALLBACK_EVENTS = [
   TwilioCallbackEvents.COMPLETED,
 ];
 
+const VERCEL_URL = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : undefined;
+
 const PUBLIC_URL =
-  process.env.NEXT_PUBLIC_BASE_URL ||
-  process.env.NGROK_PUBLIC_URL ||
-  "http://localhost:3000";
+  VERCEL_URL || process.env.NGROK_PUBLIC_URL || "http://localhost:3000";
 
 const TWILIO_CALL_STATUS_CALLBACK_URL = `${PUBLIC_URL}/api/twilio`;
 
