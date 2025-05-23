@@ -1,6 +1,6 @@
 "use client";
 
-import { CallMeButton } from "@/app/components/voiceCallControls/callMeButton";
+import { BrandedButton } from "@/app/components/ui/brandedButton";
 import { PhoneInput } from "@/app/components/voiceCallControls/phoneInput";
 import Spinner from "@/app/components/ui/spinner";
 import { makeCall, TWILIO_CALL_STATUS_FRIENDLY_TEXT } from "@/app/utils/calls";
@@ -113,7 +113,8 @@ export const VoiceCallControls = () => {
         />
       </div>
       <div className="flex flex-row gap-4">
-        <CallMeButton
+        <BrandedButton
+          label="Call Me Now"
           className="flex-shrink-0"
           disabled={digits === null || callUiState >= CallUiState.CALLING}
           onClick={onCallMeButtonClick}

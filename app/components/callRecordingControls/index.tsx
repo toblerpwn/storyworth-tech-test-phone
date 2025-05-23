@@ -1,5 +1,6 @@
 "use client";
 
+import { BrandedButton } from "@/app/components/ui/brandedButton";
 import Spinner from "@/app/components/ui/spinner";
 import { useEffect, useRef, useState } from "react";
 
@@ -20,22 +21,30 @@ export const CallRecordingControls = ({ url }: CallRecordingControlsProps) => {
     }, 1500);
   }, [url]);
 
+  const handleShowTranscript = () => {
+    console.warn("TODO: show transcript");
+  };
+
   return (
     <div className="gap-5 flex flex-col ">
       <div className="flex flex-row gap-1 text-[#12473A]">
         <p>Story recording:</p>
         {delayingPlayback ? <Spinner /> : <p>ready!</p>}
       </div>
-      <div className="flex flex-row items-center gap-2">
-        <audio
-          key={`${url}-${delayingPlayback}`}
-          ref={audioRef}
-          src={delayingPlayback ? undefined : url}
-          controls
-          preload="auto"
-          autoPlay={!delayingPlayback}
-        />
-      </div>
+      <audio
+        key={`${url}-${delayingPlayback}`}
+        ref={audioRef}
+        src={delayingPlayback ? undefined : url}
+        controls
+        preload="auto"
+        autoPlay={!delayingPlayback}
+      />
+      <BrandedButton
+        label="Show Transcript"
+        className="flex-shrink-0"
+        // disabled={digits === null || callUiState >= CallUiState.CALLING}
+        onClick={handleShowTranscript}
+      />
     </div>
   );
 };
