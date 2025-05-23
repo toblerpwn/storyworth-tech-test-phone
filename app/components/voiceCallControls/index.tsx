@@ -106,7 +106,7 @@ export const VoiceCallControls = () => {
       <div className="flex flex-col gap-2">
         <p className="text-[#12473A]">Your phone number</p>
         <PhoneInput
-          className=" max-w-sm"
+          className="max-w-sm"
           onDigitsChange={(num) => {
             setDigits(num);
           }}

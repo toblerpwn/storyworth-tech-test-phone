@@ -28,7 +28,7 @@ export const CallRecordingControls = ({ url }: CallRecordingControlsProps) => {
   return (
     <div className="gap-3 flex flex-col ">
       <div className="flex flex-row gap-1 text-[#12473A]">
-        <p>Story recording:</p>
+        <p>Your story:</p>
         {delayingPlayback ? <Spinner /> : <p>ready!</p>}
       </div>
       <div className="gap-5 flex flex-col px-5">
