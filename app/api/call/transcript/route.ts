@@ -7,7 +7,6 @@ export async function POST(req: NextRequest) {
   try {
     // decode body of the request
     const body = await req.formData();
-    console.log("POST /api/call/transcript body", body);
 
     // get callSid and recordingUrl
     const callSid = body.get("CallSid") as string;
@@ -30,6 +29,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // TODO: transaction to confirm call still exists before writing, else may create orphaned call
     await setCall(callSid, {
       transcriptUrl,
       transcriptText,

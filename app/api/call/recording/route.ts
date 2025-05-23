@@ -21,6 +21,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // TODO: transaction to confirm call still exists before writing, else may create orphaned call
     await setCall(callSid, {
       recordingUrl,
     });
