@@ -8,7 +8,7 @@ export const TWILIO_CALL_STATUS_FRIENDLY_TEXT: {
   [TwilioCallStatus.INITIATED]: "Calling you now...",
   [TwilioCallStatus.RINGING]: "Ringing! It's ringing! 🎉",
   [TwilioCallStatus.IN_PROGRESS]:
-    "Hi! Let's start with a story about your fondest childhood memory...",
+    "You answered! 😍 Let's get started. Please tell me a brief story about your fondest childhood memory...",
   [TwilioCallStatus.COMPLETED]: "Call completed. Preparing your recording...",
   [TwilioCallStatus.BUSY]: "Line was busy. Please try again.",
   [TwilioCallStatus.FAILED]: "Call failed. Please try again.",
