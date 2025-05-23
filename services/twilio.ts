@@ -29,12 +29,14 @@ const TWILIO_CALLBACK_EVENTS = [
 
 // TODO: this should work at build time on Vercel using process.env.VERCEL_URL, I think...
 // but it's not, so hard-coding for now
-const VERCEL_URL = "https://storyworth-tech-test-phone.vercel.app/";
+const VERCEL_URL = "https://storyworth-tech-test-phone.vercel.app";
 
 const PUBLIC_URL =
   process.env.NGROK_PUBLIC_URL || VERCEL_URL || "http://localhost:3000";
 
 const TWILIO_CALL_STATUS_CALLBACK_URL = `${PUBLIC_URL}/api/twilio`;
+
+console.log("TWILIO_CALL_STATUS_CALLBACK_URL", TWILIO_CALL_STATUS_CALLBACK_URL);
 
 export const createTwilioCall = async (phoneNumber: string) => {
   // using Twilio REST API to simplify the technical stack for this project
