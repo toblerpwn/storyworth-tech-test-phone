@@ -3,6 +3,8 @@
 import { BrandedButton } from "@/app/components/ui/brandedButton";
 import Spinner from "@/app/components/ui/spinner";
 import { useEffect, useRef, useState } from "react";
+import confetti from "canvas-confetti";
+import { clear } from "console";
 
 type CallRecordingControlsProps = {
   recordingUrl: string;
@@ -22,10 +24,31 @@ export const CallRecordingControls = ({
   // playing immediately reliably fails due to Twilio caching/etc
   // TODO: download locally and validate before playing (then remove delay)
   useEffect(() => {
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       setDelayingPlayback(false);
     }, 3500);
+    return () => clearTimeout(timeout);
   }, [recordingUrl]);
+
+  // Fire confetti when playback becomes ready
+  useEffect(() => {
+    let timeout: NodeJS.Timeout | undefined = undefined;
+    if (!delayingPlayback) {
+      timeout = setTimeout(() => {
+        // Fire a LOT of confetti!
+        for (let i = 0; i < 8; i++) {
+          confetti({
+            particleCount: 250,
+            spread: 180,
+            startVelocity: 70,
+            origin: { y: 0.6 + Math.random() * 0.2, x: Math.random() },
+            scalar: 0.8 + Math.random() * 0.4,
+          });
+        }
+      }, 500);
+    }
+    return timeout ? () => clearTimeout(timeout) : undefined;
+  }, [delayingPlayback]);
 
   const handleShowTranscript = () => {
     setShowTranscript((prev) => !prev);
