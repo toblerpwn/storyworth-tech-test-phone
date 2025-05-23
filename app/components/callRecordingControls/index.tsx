@@ -18,7 +18,7 @@ export const CallRecordingControls = ({ url }: CallRecordingControlsProps) => {
   useEffect(() => {
     setTimeout(() => {
       setDelayingPlayback(false);
-    }, 1500);
+    }, 3500);
   }, [url]);
 
   const handleShowTranscript = () => {
