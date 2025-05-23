@@ -116,7 +116,7 @@ export const VoiceCallControls = () => {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-2">
-        <p className="text-[#12473A]">Your phone number</p>
+        <p className="text-[#12473A] dark:text-green-100">Your phone number</p>
         <PhoneInput
           className="max-w-sm"
           onDigitsChange={(num) => {
@@ -134,7 +134,7 @@ export const VoiceCallControls = () => {
         {callUiState >= CallUiState.CALLING ? (
           <div className="flex flex-row gap-2 items-center">
             {callUiState === CallUiState.CALLING ? <Spinner /> : null}
-            <div className="font-text text-[#12473A] flex flex-col gap-2">
+            <div className="font-text text-[#12473A]  dark:text-green-100 flex flex-col gap-2">
               {statusStrings && statusStrings.length > 0
                 ? statusStrings.map((s, i) => <p key={i}>{s}</p>)
                 : null}

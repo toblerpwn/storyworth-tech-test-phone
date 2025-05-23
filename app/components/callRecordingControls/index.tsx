@@ -4,7 +4,6 @@ import { BrandedButton } from "@/app/components/ui/brandedButton";
 import Spinner from "@/app/components/ui/spinner";
 import { useEffect, useRef, useState } from "react";
 import confetti from "canvas-confetti";
-import { clear } from "console";
 
 type CallRecordingControlsProps = {
   recordingUrl: string;
@@ -56,7 +55,7 @@ export const CallRecordingControls = ({
 
   return (
     <div className="gap-3 flex flex-col ">
-      <div className="flex flex-row gap-1 text-[#12473A]">
+      <div className="flex flex-row gap-1 text-[#12473A]  dark:text-green-100">
         <p>Your story:</p>
         {delayingPlayback ? <Spinner /> : <p>ready!</p>}
       </div>
@@ -87,7 +86,7 @@ export const CallRecordingControls = ({
 
         {showTranscript ? (
           <div className="pl-8">
-            <p className="font-text text-[#12473A] border-l-4 border-[#12473A] pl-4 italic">
+            <p className="font-text   dark:text-green-100 border-l-4 border-[#12473A] pl-4 italic">
               {transcriptText ? transcriptText : "No transcript available."}
             </p>
           </div>
