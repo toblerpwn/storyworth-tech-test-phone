@@ -18,7 +18,7 @@ This is [Sean Conrad's](https://www.linkedin.com/in/seanconrad83) project for St
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app). Next is a web framework built on [React](https://react.dev/). Next also provides convenient capabilities for API construction, including [handling webhooks](https://nextjs.org/docs/app/building-your-application/routing/route-handlers#webhooks).
 
-[Twilio] is used for its [Voice API](https://www.twilio.com/docs/voice), including [outgoing phone calls](https://www.twilio.com/docs/voice/tutorials/how-to-make-outbound-phone-calls), [recording](https://www.twilio.com/docs/voice/tutorials/how-to-record-phone-calls), and [transcription](https://www.twilio.com/docs/voice/api/recording-transcription) capabilities.
+[Twilio](https://twilio.com) is used for its [Voice API](https://www.twilio.com/docs/voice), including [outgoing phone calls](https://www.twilio.com/docs/voice/tutorials/how-to-make-outbound-phone-calls), [recording](https://www.twilio.com/docs/voice/tutorials/how-to-record-phone-calls), and [transcription](https://www.twilio.com/docs/voice/api/recording-transcription) capabilities.
 
 [Firebase](https://firebase.google.com/) is used for [Authentication](https://firebase.google.com/docs/auth) (anonymous, durable user session) and [Cloud Firestore](https://firebase.google.com/docs/firestore) (document store with lots of sugar and easy client sync/subscription capabilities).
 
@@ -26,7 +26,15 @@ The application is hosted on Vercel here: https://storyworth-tech-test-phone.ver
 
 ### Data Flow (Sketch)
 
-[incoming...]
+<img src="https://github.com/user-attachments/assets/b8be6f19-49de-4a78-8cc8-6c6899f5d1f0" width=600>
+
+1. React App ("App") renders page (using Next.js routing and other framework sugar).
+2. App validates Auth session; logs in w/ anonymous (persistent) session if needed.
+3. App retrieves (or creates) `User` doc via Firestore DB. App checks the `User` doc for an `activeCall` value; if present, App UI is updated to reflect the `Call`'s status.
+4. If no valid active `Call` is found, the user can request a call from the App.
+5. Upon request, Twilio makes an outbound call to the user-entered phone number.
+6. Twilio sends callbacks on call status changes (e.g. `ringing`, `in-progress`, `completed`, etc) via webhook to our Next.js Web API routes. After the call is complete, separate callbacks hit our API for call Recordings and a Transcripts.
+7. Based on the incoming data we receive via API/webhook, we update the database. The App is listening for changes via Firestore's local client/server sync. App UI is stateful; based purely on incoming state (no diffs needed).
 
 ## Getting Started
 
